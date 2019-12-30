@@ -1,7 +1,7 @@
 import os
 
-from drivesum.memory_utilties import size_to_bytes
-from drivesum.summary_tree import SummaryTree
+from dirsum.memory_utilties import size_to_bytes
+from dirsum.summary_tree import SummaryTree
 
 
 class Summarizer:

@@ -13,20 +13,20 @@ version = Path(package_dir, 'version.txt').read_text().strip()
 
 
 setup(
-    name='drivesum',
-    description='Drive summary tool.',
+    name='dirsum',
+    description='Directory summary tool.',
     author='Chris Gregory',
     author_email='christopher.b.gregory@gmail.com',
     url='https://github.com/gregorybchris/semigenre',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    keywords=['drive', 'summary'],
+    keywords=['directory', 'file', 'summary'],
     version=version,
     license='Apache Software License',
     install_requires=requirements,
     extras_require={'testing': test_requirements},
     packages=find_packages(exclude=['tests']),
-    entry_points={"console_scripts": ["drivesum=drivesum.main:run"]},
+    entry_points={"console_scripts": ["dirsum=dirsum.main:run"]},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

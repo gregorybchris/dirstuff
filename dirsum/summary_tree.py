@@ -1,4 +1,8 @@
-from drivesum.memory_utilties import bytes_to_size
+import os
+
+from dirsum.memory_utilties import bytes_to_size
+from colorama import Fore
+
 
 class SummaryTree:
     def __init__(self, path, size=0):
@@ -17,11 +21,14 @@ class SummaryTree:
 
     def print(self, depth=0):
         formatted_size = bytes_to_size(self._size)
-        indentation = '  ' * depth
-        print(f"{indentation} |-> {formatted_size} > {self._path}")
+        indent = '  ' * depth
+        _, path_tail = os.path.split(self._path)
 
-        sorted_children = sorted(self._children, key=lambda tree: -tree.get_size())
+        print(f"{indent} |-> ", end='')
+        print(f"{Fore.BLUE}{formatted_size}", end='')
+        print(f"{Fore.RESET} > ", end='')
+        print(f"{Fore.GREEN}{path_tail}", end='')
+        print(f"{Fore.RESET}")
 
-        for child in sorted_children:
+        for child in sorted(self._children, key=lambda tree: -tree.get_size()):
             child.print(depth=depth + 1)
-            

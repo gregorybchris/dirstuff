@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from drivesum.summarizer import Summarizer
+from dirsum.summarizer import Summarizer
 
 
 def create_summary(root, min_size):
