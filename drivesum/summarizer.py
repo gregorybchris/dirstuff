@@ -1,42 +1,41 @@
 import os
 
+from drivesum.memory_utilties import size_to_bytes
+from drivesum.summary_tree import SummaryTree
+
 
 class Summarizer:
-    def __init__(self, min_bytes, max_children):
-        self._min_bytes = min_bytes
-        self._max_children = max_children
+    def __init__(self, min_size):
+        self._min_bytes = size_to_bytes(min_size)
 
-    def _format_bytes(self, n_bytes):
-        suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
-        for scale, suffix in enumerate(suffixes):
-            multiplier = 10 ** (3 * (scale + 1))
-            if n_bytes < multiplier:
-                value = round(n_bytes / multiplier * 1000, 1)
-                return '{:5.1f} {}'.format(value, suffix)
-        raise ValueError("Bytes could not be converted")
+    def summarize(self, root_dir):
+        return self._get_tree(root_dir)
 
-    def summarize(self, root, depth=0):
-        if os.path.islink(root):
-            return 0
+    def _get_empty_tree(self):
+        return SummaryTree(None, size=0)
 
-        child_paths = [os.path.join(root, f) for f in os.listdir(root)]
-        child_dirs = [p for p in child_paths if os.path.isdir(p)]
-        child_files = [p for p in child_paths if os.path.isfile(p)]
+    def _get_tree(self, root_dir):
+        if os.path.islink(root_dir):
+            return self._get_empty_tree()
 
-        total_dirs_size = 0
-        for child_dir in child_dirs:
-            child_size = self.summarize(child_dir, depth + 1)
-            total_dirs_size += child_size
+        child_paths = [os.path.join(root_dir, f) for f in os.listdir(root_dir)]
+
+        root_tree = SummaryTree(root_dir)
 
         total_files_size = 0
+        child_files = [p for p in child_paths if os.path.isfile(p)]
         for child_file in child_files:
             child_file_size = os.path.getsize(child_file)
             total_files_size += child_file_size
 
-        root_size = total_files_size + total_dirs_size
-        if root_size > self._min_bytes:
-            indentation = '  ' * depth
-            formatted_size = self._format_bytes(root_size)
-            print(f"{indentation} |-> {formatted_size} > {root}")
-        return root_size
+        total_dirs_size = 0
+        child_dirs = [p for p in child_paths if os.path.isdir(p)]
+        for child_dir in child_dirs:
+            child_tree = self._get_tree(child_dir)
+            child_size = child_tree.get_size()
+            total_dirs_size += child_size
+            if child_size > self._min_bytes:
+                root_tree.add_child(child_tree)
 
+        root_tree.set_size(total_files_size + total_dirs_size)
+        return root_tree
