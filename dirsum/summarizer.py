@@ -1,3 +1,4 @@
+"""Recursive directory summarizer."""
 import os
 
 from dirsum.memory_utilties import size_to_bytes
@@ -5,16 +6,31 @@ from dirsum.summary_tree import SummaryTree
 
 
 class Summarizer:
+    """Recursive directory summarizer."""
+
     def __init__(self, min_size):
+        """
+        Construct a Summarizer.
+
+        :param min_size: Minimum directory size to include in the summary.
+        """
         self._min_bytes = size_to_bytes(min_size)
 
     def summarize(self, root_dir):
+        """
+        Summarize the directory contents.
+
+        :param root_dir: Root directory to summarize.
+        :return: A SummaryTree representation of the file system.
+        """
         return self._get_tree(root_dir)
 
     def _get_empty_tree(self):
+        """Construct an empty tree for symlinked directories."""
         return SummaryTree(None, size=0)
 
     def _get_tree(self, root_dir):
+        """Recursively build a tree of directories."""
         if os.path.islink(root_dir):
             return self._get_empty_tree()
 

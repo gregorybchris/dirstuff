@@ -1,3 +1,4 @@
+"""Utilties for reading and formatting memory units."""
 import re
 
 
@@ -10,15 +11,28 @@ def _bytes_per_units(units):
 
 
 def bytes_to_size(n_bytes):
+    """
+    Convert bytes to a size with units.
+
+    :param n_bytes: Number of bytes.
+    :return: Size of file/dir with reasonable units.
+    """
     for units in MEMORY_UNITS:
         multiplier = _bytes_per_units(units)
         if n_bytes < multiplier * 1000:
             value = round(n_bytes / multiplier, 1)
             return '{:5.1f} {}'.format(value, units)
+
     raise ValueError(f"Bytes could not be converted to a size: {n_bytes}")
 
 
 def size_to_bytes(size):
+    """
+    Convert file size with or without units to bytes.
+
+    :param size: Size of file/dir, possibly with units.
+    :return: Size of file/dir in bytes.
+    """
     # Already bytes
     match = re.search(r'^[0-9]+$', size)
     if match is not None:
