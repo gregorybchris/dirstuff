@@ -25,4 +25,7 @@ dirsum <path-to-directory>
 # Specify the minimum file size (default is 1GB)
 dirsum <path-to-directory> --size 750MB
 dirsum <path-to-directory> --size 50KB
+
+# Print full absolute paths to directories instead of directory names
+dirsum <path-to-directory> --absolute
 ```
