@@ -43,7 +43,7 @@ class SummaryTree:
         """
         self._children.append(child_tree)
 
-    def print(self, depth=0):
+    def print(self, absolute=False, depth=0):
         """
         Print the formatted tree.
 
@@ -51,13 +51,16 @@ class SummaryTree:
         """
         formatted_size = bytes_to_size(self._size)
         indent = '  ' * depth
-        _, path_tail = os.path.split(self._path)
+        _, directory = os.path.split(self._path)
+
+        if absolute:
+            directory = self._path
 
         print(f"{indent} |-> ", end='')
         print(f"{Fore.BLUE}{formatted_size}", end='')
         print(f"{Fore.RESET} > ", end='')
-        print(f"{Fore.GREEN}{path_tail}", end='')
+        print(f"{Fore.GREEN}{directory}", end='')
         print(f"{Fore.RESET}")
 
         for child in sorted(self._children, key=lambda tree: -tree.get_size()):
-            child.print(depth=depth + 1)
+            child.print(absolute=absolute, depth=depth + 1)
