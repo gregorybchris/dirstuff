@@ -1,0 +1,73 @@
+[tool.poetry]
+authors = ["Chris Gregory <christopher.b.gregory@gmail.com>"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+description = "Directory summary tool."
+keywords = ['directory', 'file', 'summary']
+license = "Apache Software License"
+name = "dirsum"
+readme = "README.md"
+repository = "https://github.com/gregorybchris/dirsum"
+version = "0.1.0"
+
+[[tool.poetry.packages]]
+include = "dirsum"
+
+[tool.poetry.dependencies]
+click = "^8.1.7"
+python = ">=3.9,<3.13"
+colorama = "^0.4.6"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+mypy = "^1.6.0"
+pylint = "^3.0.1"
+
+[tool.poetry.scripts]
+dirsum = "dirsum.cli.cli:main"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.isort]
+line_length = 120
+profile = "black"
+src_paths = "*"
+
+[tool.mypy]
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pylint.basic]
+good-names = ["f", "i"]
+notes = ["FIXME"]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+]
+
+[tool.pylint.reports]
+output-format = "colorized"

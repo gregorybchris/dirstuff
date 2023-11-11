@@ -10,24 +10,18 @@ Install the current PyPI release:
 pip install dirsum
 ```
 
-Or install from source:
-
-```bash
-pip install git+https://github.com/gregorybchris/dirsum
-```
-
 ## Usage
 
 ```bash
-# Run the dirsum command to summarize a directory
-dirsum <path-to-directory>
+# Run the summarize command to summarize a directory
+dirsum summarize <path-to-directory>
 
 # Specify the minimum file size (default is 1GB)
-dirsum <path-to-directory> --size 750MB
-dirsum <path-to-directory> --size 50KB
+dirsum summarize <path-to-directory> --size 750MB
+dirsum summarize <path-to-directory> --size 50KB
 
 # Print full absolute paths to directories instead of directory names
-dirsum <path-to-directory> --absolute
+dirsum summarize <path-to-directory> --absolute
 ```
 
 ## Example Output
@@ -35,7 +29,7 @@ dirsum <path-to-directory> --absolute
 ```bash
 # Summarize the /home/user/my_documents directory
 # showing only directories greater than 20MB in size
-dirsum /home/user/my_documents --size 20MB
+dirsum summarize /home/user/my_documents --size 20MB
 ```
 
 ```python
