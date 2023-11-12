@@ -2,22 +2,15 @@ import os
 from pathlib import Path, PurePath
 
 from dirsum.lib.filter_criteria import FilterCriteria
-from dirsum.lib.summary_tree import SummaryTree
+from dirsum.lib.tree import Tree
 
 
-class Summarizer:
+class Parser:
     def __init__(self, *, filter_criteria: FilterCriteria):
         self.filter_criteria = filter_criteria
 
-    def summarize(self, root_dirpath: Path) -> SummaryTree:
-        tree = self._create_tree(root_dirpath)
-        filtered_tree = tree.filter(self.filter_criteria)
-        if filtered_tree is None:
-            raise ValueError("No paths matched filters")
-        return filtered_tree
-
-    def _create_tree(self, root_dirpath: Path) -> SummaryTree:
-        tree = SummaryTree(root_dirpath)
+    def parse(self, root_dirpath: Path) -> Tree:
+        tree = Tree(root_dirpath)
         child_paths = [PurePath.joinpath(root_dirpath, f) for f in Path.iterdir(root_dirpath)]
 
         total_files_size = 0
@@ -31,7 +24,7 @@ class Summarizer:
         for child_path in child_paths:
             if Path.is_symlink(child_path):
                 continue
-            child_tree = self._create_tree(child_path)
+            child_tree = self.parse(child_path)
             if child_tree is None:
                 continue
             total_size += child_tree.get_size()

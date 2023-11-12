@@ -13,23 +13,34 @@ pip install dirsum
 ## Usage
 
 ```bash
-# Run the summarize command to summarize a directory
-dirsum summarize <path-to-directory>
+# Run the tree command to summarize a directory
+$ dirsum tree <root-dir>
 
-# Specify the minimum file size (default is 1GB)
-dirsum summarize <path-to-directory> --size 750MB
-dirsum summarize <path-to-directory> --size 50KB
+# Specify the minimum file size (default is 10MB)
+$ dirsum tree <root-dir> --size 750MB
+$ dirsum tree <root-dir> --size 50KB
 
 # Print full absolute paths to directories instead of directory names
-dirsum summarize <path-to-directory> --absolute
+$ dirsum tree <root-dir> --absolute
 ```
 
-## Example Output
+```bash
+# Run the list command to find all directories with a matching name
+$ dirsum list <root-dir> <dir-name>
+
+# Specify the minimum file size (default is 10MB)
+$ dirsum list <root-dir> <dir-name> --size 750MB
+$ dirsum list <root-dir> <dir-name> --size 50KB
+```
+
+## Examples
+
+### Tree
 
 ```bash
 # Summarize the /home/user/my_documents directory
 # showing only directories greater than 20MB in size
-dirsum summarize /home/user/my_documents --size 20MB
+$ dirsum tree /home/user/my_documents --size 20MB
 ```
 
 ```python
@@ -45,4 +56,17 @@ dirsum summarize /home/user/my_documents --size 20MB
         |-> 263.8 MB > boring_docs
         |-> 257.7 MB > reports
     |->  22.5 MB > games
+```
+
+### List
+
+```bash
+# List all node_modules folders under the /home/user/my_code directory
+$ dirsum list ~/Documents/Code/Projects/Current node_modules
+```
+
+```python
+ |-> 419.6 MB > /hume/user/my_code/portfolio/web/node_modules
+ |-> 320.3 MB > /hume/user/my_code/fun_project/node_modules
+ |-> 298.1 MB > /hume/user/my_code/simple_game/version_2/node_modules
 ```
