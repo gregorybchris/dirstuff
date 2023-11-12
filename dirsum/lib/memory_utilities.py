@@ -1,4 +1,3 @@
-"""Utilities for reading and formatting memory units."""
 import re
 
 MEMORY_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"]
@@ -20,7 +19,7 @@ def bytes_to_size(n_bytes: int) -> str:
         multiplier = _bytes_per_units(units)
         if n_bytes < multiplier * 1000:
             value = round(n_bytes / multiplier, 1)
-            return "{:5.1f} {}".format(value, units)
+            return f"{value:5.1f} {units}"
 
     raise ValueError(f"Bytes could not be converted to a size: {n_bytes}")
 

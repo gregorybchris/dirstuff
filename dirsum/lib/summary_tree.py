@@ -1,70 +1,69 @@
-"""Tree to represent file system of directories."""
 import os
 from pathlib import Path
 from typing import List, Optional
 
 from colorama import Fore
 
+from dirsum.lib.filter_criteria import FilterCriteria
 from dirsum.lib.memory_utilities import bytes_to_size
 
 
 class SummaryTree:
-    """Tree to represent file system of directories."""
-
-    def __init__(self, path: Optional[Path], size: int = 0):
-        """
-        Construct a SummaryTree.
-
-        :param path: Filepath to the tree's root node directory.
-        :param size: Size in bytes of the tree's root node directory.
-        """
-        self._size = size
-        self._path = path
-        self._children: List[SummaryTree] = []
+    def __init__(self, path: Path, size: int = 0):
+        self.size = size
+        self.path = path
+        self.children: List[SummaryTree] = []
 
     def set_size(self, n_bytes: int) -> None:
-        """
-        Set the tree's root node size.
-
-        :param n_bytes: Number of bytes for the tree's root node.
-        """
-        self._size = n_bytes
+        self.size = n_bytes
 
     def get_size(self) -> int:
-        """
-        Get the tree's root node size.
-
-        :return: The tree's root node size.
-        """
-        return self._size
+        return self.size
 
     def add_child(self, child_tree: "SummaryTree") -> None:
-        """
-        Add a child node to the tree at the root.
+        self.children.append(child_tree)
 
-        :param child_tree: SummaryTree to add as child to the current tree.
-        """
-        self._children.append(child_tree)
+    def filter(self, filter_criteria: FilterCriteria) -> Optional["SummaryTree"]:
+        if self.size < filter_criteria.min_bytes:
+            return None
 
-    def print(self, absolute: bool = False, depth: int = 0) -> None:
-        """
-        Print the formatted tree.
+        filtered_tree = SummaryTree(self.path, size=self.size)
 
-        :param depth: Internal parameter used to control indentation.
-        """
-        formatted_size = bytes_to_size(self._size)
+        if filter_criteria.names is not None:
+            if any(name == self.path.name for name in filter_criteria.names):
+                return filtered_tree
+            if len(self.children) == 0:
+                return None
+
+        for child in self.children:
+            filtered_child = child.filter(filter_criteria)
+            if filtered_child is not None:
+                filtered_tree.add_child(filtered_child)
+
+        if filter_criteria.names is not None:
+            if len(filtered_tree.children) == 0 and all(name != self.path.name for name in filter_criteria.names):
+                return None
+
+        return filtered_tree
+
+    def print(self, absolute: bool = False, list_mode: bool = False, depth: int = 0) -> None:
+        formatted_size = bytes_to_size(self.size)
         indent = "  " * depth
-        _, dir_str = os.path.split(str(self._path))
-        directory: Optional[Path] = Path(dir_str)
+        _, dir_str = os.path.split(str(self.path))
+        directory = Path(dir_str)
 
         if absolute:
-            directory = self._path
+            directory = self.path
 
-        print(f"{indent} |-> ", end="")
-        print(f"{Fore.BLUE}{formatted_size}", end="")
-        print(f"{Fore.RESET} > ", end="")
-        print(f"{Fore.GREEN}{directory}", end="")
-        print(f"{Fore.RESET}")
+        if list_mode:
+            indent = ""
 
-        for child in sorted(self._children, key=lambda tree: -tree.get_size()):
-            child.print(absolute=absolute, depth=depth + 1)
+        if not list_mode or len(self.children) == 0:
+            print(f"{indent} |-> ", end="")
+            print(f"{Fore.BLUE}{formatted_size}", end="")
+            print(f"{Fore.RESET} > ", end="")
+            print(f"{Fore.GREEN}{directory}", end="")
+            print(f"{Fore.RESET}")
+
+        for child in sorted(self.children, key=lambda tree: -tree.get_size()):
+            child.print(absolute=absolute, list_mode=list_mode, depth=depth + 1)
