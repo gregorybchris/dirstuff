@@ -1,8 +1,8 @@
 import os
 from pathlib import Path, PurePath
 
-from dirsum.lib.filter_criteria import FilterCriteria
-from dirsum.lib.tree import Tree
+from dirstuff.lib.filter_criteria import FilterCriteria
+from dirstuff.lib.tree import Tree
 
 
 class Parser:

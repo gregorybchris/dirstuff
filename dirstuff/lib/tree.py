@@ -4,8 +4,8 @@ from typing import List
 
 from colorama import Fore
 
-from dirsum.lib.filter_criteria import FilterCriteria
-from dirsum.lib.memory_utilities import bytes_to_size
+from dirstuff.lib.filter_criteria import FilterCriteria
+from dirstuff.lib.memory_utilities import bytes_to_size
 
 
 class Tree:
@@ -65,4 +65,5 @@ class Tree:
             return
 
         for child in tree.children:
+            cls._collect_trees(child, dir_name, trees)
             cls._collect_trees(child, dir_name, trees)

@@ -2,11 +2,10 @@ import logging
 from pathlib import Path
 
 import click
-
-from dirsum.lib.filter_criteria import FilterCriteria
-from dirsum.lib.memory_utilities import size_to_bytes
-from dirsum.lib.parser import Parser
-from dirsum.lib.tree import Tree
+from dirstuff.lib.filter_criteria import FilterCriteria
+from dirstuff.lib.memory_utilities import size_to_bytes
+from dirstuff.lib.parser import Parser
+from dirstuff.lib.tree import Tree
 
 logger = logging.getLogger(__name__)
 
