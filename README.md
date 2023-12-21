@@ -76,3 +76,24 @@ $ dirstuff list ~/Documents/Code/Projects/Current node_modules
  |-> 320.3 MB > /user/my_code/fun_project/node_modules
  |-> 298.1 MB > /user/my_code/simple_game/version_2/node_modules
 ```
+
+## Path utilities
+
+DirStuff provides some Python utilities for interacting with the filesystem.
+
+- rename
+- move
+- copy
+- delete
+- walk
+
+In this example we iterate over nested folders that contain .txt files and rename them to have .md extensions.
+
+```python
+from dirstuff.os import Dir
+
+d = Dir("my_folder")
+for sub in d.iter_dirs():
+    for f in sub.iter_files():
+        f.rename_regex(r"([a-z]*)\.txt", r"\1.md")
+```
