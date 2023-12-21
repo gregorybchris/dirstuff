@@ -1,4 +1,18 @@
-# DirStuff
+<div align="center">
+  <img src="assets/dirstuff-banner.png">
+  <h1>dirstuff</h1>
+
+  <p>
+    <strong>utilities for filesystem operations</strong>
+  </p>
+
+  <br>
+  <div>
+    <a href="https://badge.fury.io/py/dirstuff"><img src="https://badge.fury.io/py/dirstuff.svg" alt="PyPI"></a>
+    <a href="https://pepy.tech/project/dirstuff"><img src="https://pepy.tech/badge/dirstuff" alt="Downloads"></a>
+  </div>
+  <br>
+</div>
 
 ## Summarization
 
@@ -79,7 +93,7 @@ $ dirstuff list ~/Documents/Code/Projects/Current node_modules
 
 ## Path utilities
 
-DirStuff provides some Python utilities for interacting with the filesystem.
+dirstuff provides some Python utilities for interacting with the filesystem.
 
 - rename
 - move
