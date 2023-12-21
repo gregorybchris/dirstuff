@@ -23,6 +23,13 @@ class Path(ABC):
     def exists(self) -> bool:
         return self.libpath.exists()
 
+    def __str__(self) -> str:
+        return str(self.libpath)
+
+    @property
+    def parent(self) -> "Dir":
+        return Dir(self.libpath.parent)
+
 
 class File(Path):
     def __init__(self, *args: Any, **kwargs: Any):
@@ -32,12 +39,20 @@ class File(Path):
 
     def rename(self, new_name: str) -> "File":
         new_path = self.libpath.parent / new_name
+        if new_name == self.name:
+            raise ValueError(f"No change made to file name: {self.name}")
+        if not self.libpath.exists():
+            raise FileNotFoundError(f"File does not exist: {self.libpath}")
         self.libpath = self.libpath.rename(new_path)
         return self
 
     def rename_regex(self, search: str, replace: str) -> "File":
         new_name = re.sub(search, replace, self.name)
+        if new_name == self.name:
+            raise ValueError(f"No change made to file name: {self.name}")
         new_path = self.libpath.parent / new_name
+        if not self.libpath.exists():
+            raise FileNotFoundError(f"File does not exist: {self.libpath}")
         self.libpath = self.libpath.rename(new_path)
         return self
 

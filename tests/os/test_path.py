@@ -90,6 +90,13 @@ class TestFile:
         file.delete()
         assert not path.exists()
 
+    def test_file_parent(self, tmp_path_factory: TempPathFactory) -> None:
+        base_dirpath = tmp_path_factory.mktemp("base")
+        filepath = base_dirpath / "file.txt"
+        file = File(filepath)
+        parent_dir = file.parent
+        assert parent_dir.libpath == base_dirpath
+
 
 class TestDir:
     def test_dir_rename(self, tmp_path_factory: TempPathFactory) -> None:
@@ -191,3 +198,10 @@ class TestDir:
         assert not path.exists()
         dir.make()
         assert path.exists()
+
+    def test_dir_parent(self, tmp_path_factory: TempPathFactory) -> None:
+        base_dirpath = tmp_path_factory.mktemp("base")
+        dirpath = base_dirpath / "my_dir"
+        dir = Dir(dirpath)
+        parent_dirpath = dir.parent
+        assert parent_dirpath.libpath == base_dirpath
