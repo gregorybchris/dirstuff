@@ -3,7 +3,7 @@ import re
 import shutil
 from abc import ABC
 from pathlib import Path as PathlibPath
-from typing import Any, List, Tuple
+from typing import Any, Iterator, List, Tuple
 
 
 class Path(ABC):
@@ -94,13 +94,15 @@ class Dir(Path):
                 raise ValueError(f"Could not parse path as file or directory: {libpath}")
         return files, dirs
 
-    def iter_files(self) -> List["File"]:
-        files, _ = self.walk()
-        return files
+    def iter_files(self) -> Iterator["File"]:
+        for libpath in self.libpath.iterdir():
+            if libpath.is_file():
+                yield File(libpath)
 
-    def iter_dirs(self) -> List["Dir"]:
-        _, dirs = self.walk()
-        return dirs
+    def iter_dirs(self) -> Iterator["Dir"]:
+        for libpath in self.libpath.iterdir():
+            if libpath.is_dir():
+                yield Dir(libpath)
 
     def rename(self, new_name: str) -> "Dir":
         new_path = self.libpath.parent / new_name
