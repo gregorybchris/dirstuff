@@ -75,6 +75,14 @@ class File(Path):
     def delete(self, missing_ok: bool = False) -> None:
         self.libpath.unlink(missing_ok=missing_ok)
 
+    @property
+    def name_no_extension(self) -> str:
+        return self.libpath.stem
+
+    @property
+    def extension(self) -> str:
+        return self.libpath.suffix
+
 
 class Dir(Path):
     def __init__(self, *args: Any, **kwargs: Any):

@@ -16,7 +16,7 @@ license = "Apache Software License"
 name = "dirstuff"
 readme = "README.md"
 repository = "https://github.com/gregorybchris/dirstuff"
-version = "0.1.3"
+version = "0.1.4"
 
 [[tool.poetry.packages]]
 include = "dirstuff"

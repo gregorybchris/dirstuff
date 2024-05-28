@@ -97,6 +97,18 @@ class TestFile:
         parent_dir = file.parent
         assert parent_dir.libpath == base_dirpath
 
+    def test_file_name_no_extension(self, tmp_path_factory: TempPathFactory) -> None:
+        base_dirpath = tmp_path_factory.mktemp("base")
+        filepath = base_dirpath / "my-file.txt"
+        file = File(filepath)
+        assert file.name_no_extension == "my-file"
+
+    def test_file_extension(self, tmp_path_factory: TempPathFactory) -> None:
+        base_dirpath = tmp_path_factory.mktemp("base")
+        filepath = base_dirpath / "my-file.txt"
+        file = File(filepath)
+        assert file.extension == ".txt"
+
 
 class TestDir:
     def test_dir_rename(self, tmp_path_factory: TempPathFactory) -> None:
