@@ -18,7 +18,7 @@ class TestFile:
         assert path_b.exists()
         assert file.libpath == path_b
 
-    def test_file_regex_rename(self, tmp_path_factory: TempPathFactory) -> None:
+    def test_file_rename_regex(self, tmp_path_factory: TempPathFactory) -> None:
         base_dirpath = tmp_path_factory.mktemp("base")
         path_a = base_dirpath / "file_a.txt"
         path_a.write_text("A")

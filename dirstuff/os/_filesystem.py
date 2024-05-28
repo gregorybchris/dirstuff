@@ -37,18 +37,18 @@ class File(Path):
         if self.libpath.exists() and not self.libpath.is_file():
             raise ValueError(f"Tried to create File from non-file path: {self.libpath}")
 
-    def rename(self, new_name: str) -> "File":
-        new_path = self.libpath.parent / new_name
-        if new_name == self.name:
+    def rename(self, new_name: str, same_name_ok: bool = False) -> "File":
+        if new_name == self.name and not same_name_ok:
             raise ValueError(f"No change made to file name: {self.name}")
         if not self.libpath.exists():
             raise FileNotFoundError(f"File does not exist: {self.libpath}")
+        new_path = self.libpath.parent / new_name
         self.libpath = self.libpath.rename(new_path)
         return self
 
-    def rename_regex(self, search: str, replace: str) -> "File":
-        new_name = re.sub(search, replace, self.name)
-        if new_name == self.name:
+    def rename_regex(self, pattern: str, replace: str, same_name_ok: bool = False) -> "File":
+        new_name = re.sub(pattern, replace, self.name)
+        if new_name == self.name and not same_name_ok:
             raise ValueError(f"No change made to file name: {self.name}")
         new_path = self.libpath.parent / new_name
         if not self.libpath.exists():
@@ -104,13 +104,21 @@ class Dir(Path):
             if libpath.is_dir():
                 yield Dir(libpath)
 
-    def rename(self, new_name: str) -> "Dir":
+    def rename(self, new_name: str, same_name_ok: bool = False) -> "Dir":
+        if new_name == self.name and not same_name_ok:
+            raise ValueError(f"No change made to dir name: {self.name}")
+        if not self.libpath.exists():
+            raise FileNotFoundError(f"Dir does not exist: {self.libpath}")
         new_path = self.libpath.parent / new_name
         self.libpath = self.libpath.rename(new_path)
         return self
 
-    def rename_regex(self, search: str, replace: str) -> "Dir":
-        new_name = re.sub(search, replace, self.name)
+    def rename_regex(self, pattern: str, replace: str, same_name_ok: bool = False) -> "Dir":
+        new_name = re.sub(pattern, replace, self.name)
+        if new_name == self.name and not same_name_ok:
+            raise ValueError(f"No change made to dir name: {self.name}")
+        if not self.libpath.exists():
+            raise FileNotFoundError(f"Dir does not exist: {self.libpath}")
         new_path = self.libpath.parent / new_name
         self.libpath = self.libpath.rename(new_path)
         return self
