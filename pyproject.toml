@@ -34,7 +34,7 @@ pytest = "^8.2.1"
 semver = "^3.0.2"
 
 [tool.poetry.scripts]
-dirsum = "dirstuff.cli.cli:main"
+dirstuff = "dirstuff.cli.cli:main"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
