@@ -14,10 +14,6 @@
   <br>
 </div>
 
-## Summarization
-
-Summarize a directory recursively by file size. This tool can be used to quickly search a drive for large files taking up too much space.
-
 ## Installation
 
 Install the current PyPI release:
@@ -26,32 +22,45 @@ Install the current PyPI release:
 pip install dirstuff
 ```
 
-## Usage
+## Path utilities
 
-```bash
-# Run the tree command to summarize a directory
-$ dirstuff tree <root-dir>
+dirstuff provides some Python utilities for interacting with the filesystem.
 
-# Specify the minimum file size (default is 10MB)
-$ dirstuff tree <root-dir> --size 750MB
-$ dirstuff tree <root-dir> --size 50KB
+- rename
+- move
+- copy
+- delete
+- walk
 
-# Print full absolute paths to directories instead of directory names
-$ dirstuff tree <root-dir> --absolute
+### Rename files with a regex
+
+In this example we iterate over nested folders that contain .txt files and rename them to have .md extensions.
+
+```python
+from dirstuff import Dir
+
+d = Dir("my_folder")
+for sub in d.iter_dirs():
+    for f in sub.iter_files():
+        f.rename_regex(r"([a-z]*)\.txt", r"\1.md")
 ```
 
-```bash
-# Run the search command to find all directories with a matching name
-$ dirstuff search <root-dir> <dir-name>
+### Delete a folder
 
-# Specify the minimum file size (default is 10MB)
-$ dirstuff search <root-dir> <dir-name> --size 750MB
-$ dirstuff search <root-dir> <dir-name> --size 50KB
+No need to switch between `pathlib` and `shutil` packages. All filesystem utilities are available on the `Dir` class.
+
+```python
+from dirstuff import Dir
+
+d = Dir("my_folder")
+d.delete()
 ```
 
-## Examples
+## Summarization
 
 ### Tree
+
+Summarize a directory recursively by file size. This tool can be used to quickly search a drive for large files taking up too much space.
 
 ```bash
 # Summarize the /home/user/my_documents directory
@@ -74,36 +83,21 @@ $ dirstuff tree /home/user/my_documents --size 20MB
     |->  22.5 MB > games
 ```
 
-### List
+> You can show the full absolute paths with --absolute
+
+### Search
+
+Search for all folders with a matching name.
 
 ```bash
-# List all node_modules folders under the /home/user/my_code directory
-$ dirstuff list ~/Documents/Code/Projects/Current node_modules
+# List all node_modules folders under the /code/projects directory
+$ dirstuff search /code/projects node_modules --absolute
 ```
 
 ```python
- |-> 419.6 MB > /user/my_code/portfolio/web/node_modules
- |-> 320.3 MB > /user/my_code/fun_project/node_modules
- |-> 298.1 MB > /user/my_code/simple_game/version_2/node_modules
+ |-> 419.6 MB > /code/projects/portfolio/web/node_modules
+ |-> 320.3 MB > /code/projects/fun_project/node_modules
+ |-> 298.1 MB > /code/projects/simple_game/version_2/node_modules
 ```
 
-## Path utilities
-
-dirstuff provides some Python utilities for interacting with the filesystem.
-
-- rename
-- move
-- copy
-- delete
-- walk
-
-In this example we iterate over nested folders that contain .txt files and rename them to have .md extensions.
-
-```python
-from dirstuff import Dir
-
-d = Dir("my_folder")
-for sub in d.iter_dirs():
-    for f in sub.iter_files():
-        f.rename_regex(r"([a-z]*)\.txt", r"\1.md")
-```
+> The same --size option also works with the search command
