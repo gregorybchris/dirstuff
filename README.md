@@ -83,7 +83,7 @@ $ dirstuff tree /home/user/my_documents --size 20MB
     |->  22.5 MB > games
 ```
 
-> You can show the full absolute paths with --absolute
+> You can show the full absolute paths with `--absolute`
 
 ### Search
 
@@ -100,4 +100,4 @@ $ dirstuff search /code/projects node_modules --absolute
  |-> 298.1 MB > /code/projects/simple_game/version_2/node_modules
 ```
 
-> The same --size option also works with the search command
+> The same `--size` option also works with the search command
