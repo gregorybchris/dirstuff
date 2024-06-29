@@ -41,16 +41,12 @@ $ dirstuff tree <root-dir> --absolute
 ```
 
 ```bash
-# Run the list command to find all directories with a matching name
-$ dirstuff list <root-dir> <dir-name>
+# Run the search command to find all directories with a matching name
+$ dirstuff search <root-dir> <dir-name>
 
 # Specify the minimum file size (default is 10MB)
-$ dirstuff list <root-dir> <dir-name> --size 750MB
-$ dirstuff list <root-dir> <dir-name> --size 50KB
-```
-
-```bash
-from dirstuff.os import Path
+$ dirstuff search <root-dir> <dir-name> --size 750MB
+$ dirstuff search <root-dir> <dir-name> --size 50KB
 ```
 
 ## Examples
@@ -104,7 +100,7 @@ dirstuff provides some Python utilities for interacting with the filesystem.
 In this example we iterate over nested folders that contain .txt files and rename them to have .md extensions.
 
 ```python
-from dirstuff.os import Dir
+from dirstuff import Dir
 
 d = Dir("my_folder")
 for sub in d.iter_dirs():

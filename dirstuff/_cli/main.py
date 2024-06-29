@@ -2,17 +2,18 @@ import logging
 from pathlib import Path
 
 import click
-from dirstuff.lib.filter_criteria import FilterCriteria
-from dirstuff.lib.memory_utilities import size_to_bytes
-from dirstuff.lib.parser import Parser
-from dirstuff.lib.tree import Tree
+
+from dirstuff.summary.filter_criteria import FilterCriteria
+from dirstuff.summary.memory_utilities import size_to_bytes
+from dirstuff.summary.parser import Parser
+from dirstuff.summary.tree import Tree
 
 logger = logging.getLogger(__name__)
 
 
 @click.group()
 def main() -> None:
-    """Main CLI entrypoint."""
+    pass
 
 
 def get_tree(root: Path, min_size: str) -> Tree:
@@ -23,7 +24,8 @@ def get_tree(root: Path, min_size: str) -> Tree:
     tree = parser.parse(absolute_root)
     filtered = tree.filter(filter_criteria)
     if filtered is None:
-        raise ValueError("No paths matched filters")
+        msg = "No paths matched filters"
+        raise ValueError(msg)
     return filtered
 
 
@@ -40,14 +42,14 @@ def tree_command(
     tree.print(absolute=absolute)
 
 
-@main.command(name="list")
+@main.command(name="search")
 @click.argument("root", type=Path)
 @click.argument("dir_name", type=str)
 @click.option("--size", "min_size", type=str, default="10MB", help="Minimum size of directory to show.")
-def list_command(
+def search_command(
     root: Path,
     dir_name: str,
     min_size: str,
 ) -> None:
     tree = get_tree(root, min_size)
-    tree.list(dir_name=dir_name)
+    tree.print_list(dir_name=dir_name)

@@ -1,5 +1,4 @@
 import semver
-
 from dirstuff import __version__
 
 

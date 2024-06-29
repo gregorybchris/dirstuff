@@ -1,19 +1,19 @@
 {
-  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[python]": { "editor.defaultFormatter": "ms-python.black-formatter" },
+  "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
   "[toml]": { "editor.defaultFormatter": "tamasfe.even-better-toml" },
-  "editor.codeActionsOnSave": { "source.organizeImports": "explicit" },
-  "black-formatter.args": ["--config", "pyproject.toml"],
-  "cSpell.words": ["dirstuff", "libpath", "randn"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": true,
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   "editor.rulers": [120],
-  "isort.args": ["--settings-file", "pyproject.toml"],
   "mypy-type-checker.args": ["--config-file", "pyproject.toml"],
   "prettier.printWidth": 120,
-  "pylint.path": ["pylint"],
-  "pylint.args": ["--rcfile", "pyproject.toml"]
+  "ruff.format.args": ["--config", "pyproject.toml"],
+  "ruff.nativeServer": true,
+  "cSpell.words": ["libpath"]
 }

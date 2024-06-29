@@ -1,13 +1,9 @@
 [tool.poetry]
 authors = ["Chris Gregory <christopher.b.gregory@gmail.com>"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Topic :: Software Development",
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
 description = "Directory summary tool."
@@ -16,37 +12,28 @@ license = "Apache Software License"
 name = "dirstuff"
 readme = "README.md"
 repository = "https://github.com/gregorybchris/dirstuff"
-version = "0.1.4"
+version = "0.2.0"
 
 [[tool.poetry.packages]]
 include = "dirstuff"
 
 [tool.poetry.dependencies]
-click = "^8.1.7"
-python = ">=3.9"
-colorama = "^0.4.6"
+click = "^8.1.0"
+python = ">=3.11"
+colorama = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
 mypy = "^1.10.0"
-pylint = "^3.2.2"
-pytest = "^8.2.1"
-semver = "^3.0.2"
+pytest = "^8.2.0"
+ruff = "^0.5.0"
+semver = "^3.0.0"
 
 [tool.poetry.scripts]
-dirstuff = "dirstuff.cli.cli:main"
+dirstuff = "dirstuff._cli.main:main"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
-
-[tool.black]
-line-length = 120
-
-[tool.isort]
-line_length = 120
-profile = "black"
-src_paths = "*"
 
 [tool.mypy]
 disallow_incomplete_defs = true
@@ -54,19 +41,50 @@ disallow_untyped_calls = true
 disallow_untyped_defs = true
 ignore_missing_imports = true
 
-[tool.pylint.basic]
-good-names = ["f", "i"]
-notes = ["FIXME"]
+[tool.ruff]
+line-length = 120
+src = ["dirstuff"]
 
-[tool.pylint.format]
-max-line-length = 120
-
-[tool.pylint.messages_control]
-disable = [
-    "missing-function-docstring",
-    "missing-module-docstring",
-    "missing-class-docstring",
+[tool.ruff.lint]
+ignore = ["A001", "A002", "D100", "D104", "D203", "D213", "FIX002", "TD003"]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "BLE",
+    "C4",
+    "D",
+    "E",
+    "EM",
+    "ERA",
+    "F",
+    "FIX",
+    "G",
+    "I",
+    "ICN",
+    "ISC",
+    "LOG",
+    "N",
+    "PL",
+    "PT",
+    "PTH",
+    "PLR",
+    "RET",
+    "RUF",
+    "SIM",
+    "SLF",
+    "T20",
+    "TCH",
+    "TD",
+    "TID",
+    "W",
 ]
 
-[tool.pylint.reports]
-output-format = "colorized"
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/**/*.py" = ["D", "SLF", "PLR2004"]
