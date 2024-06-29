@@ -4,6 +4,15 @@ from tests.utilities.temp_utilities import create_directory, create_file, file_h
 
 
 class TestFile:
+    def test_construct_file_from_directory_raises(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+        # Set up file system
+        parent_libpath = tmp_path_factory.mktemp("parent")
+        libpath_dir = create_directory(parent_libpath, "dir")
+
+        # Attempt to construct file from directory
+        with pytest.raises(ValueError, match="Tried to create File from non-file path"):
+            File(libpath_dir)
+
     def test_rename_updates_file_name(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")

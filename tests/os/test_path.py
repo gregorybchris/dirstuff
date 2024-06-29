@@ -29,3 +29,8 @@ class TestPath:
         libpath = tmp_path_factory.mktemp("folder")
         path = Path(libpath)
         assert path.name == libpath.name
+
+    def test_get_path_str_repr(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+        libpath = tmp_path_factory.mktemp("folder")
+        path = Path(libpath)
+        assert str(path) == str(libpath)
