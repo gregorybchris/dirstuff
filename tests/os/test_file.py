@@ -4,7 +4,7 @@ from tests.utilities.temp_utilities import create_directory, create_file, file_h
 
 
 class TestFile:
-    def test_construct_file_from_directory_raises(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_construct_file_from_dirpath_raises(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath_dir = create_directory(parent_libpath, "dir")
@@ -26,6 +26,7 @@ class TestFile:
         new_libpath = parent_libpath / "b.txt"
         assert renamed_file.libpath == new_libpath
         assert file_has_text(new_libpath, "content")
+        assert not libpath.exists()
 
     def test_rename_raises_on_same_name(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
@@ -50,7 +51,7 @@ class TestFile:
         assert renamed_file.libpath == libpath
         assert file_has_text(libpath, "content")
 
-    def test_rename_raises_on_file_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_rename_raises_on_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath = parent_libpath / "a.txt"
@@ -63,41 +64,42 @@ class TestFile:
     def test_rename_regex_updates_file_name(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
-        libpath = create_file(parent_libpath, "file_a.txt", text="A")
+        libpath = create_file(parent_libpath, "file-a.txt", text="A")
 
         # Rename file using regex
         file = File(libpath)
-        renamed_file = file.rename_regex(r"file_([a-z]*)", r"file_with_\1_name")
+        renamed_file = file.rename_regex(r"file-([a-z]*)", r"file-with-\1-name")
 
         # Check file libpath has changed and file content has moved correctly
-        new_libpath = parent_libpath / "file_with_a_name.txt"
+        new_libpath = parent_libpath / "file-with-a-name.txt"
         assert renamed_file.libpath == new_libpath
         assert file_has_text(new_libpath, "A")
+        assert not libpath.exists()
 
     def test_rename_regex_raises_on_same_name(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
-        libpath = create_file(parent_libpath, "file_a.txt", text="A")
+        libpath = create_file(parent_libpath, "file-a.txt", text="A")
 
         # Rename file to same name
         file = File(libpath)
-        with pytest.raises(ValueError, match="No change made to file name: file_a.txt"):
-            file.rename_regex(r"file_([a-z]*)", r"file_\1")
+        with pytest.raises(ValueError, match="No change made to file name: file-a.txt"):
+            file.rename_regex(r"file-([a-z]*)", r"file-\1")
 
     def test_rename_regex_does_nothing_on_same_name(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
-        libpath = create_file(parent_libpath, "file_a.txt", text="A")
+        libpath = create_file(parent_libpath, "file-a.txt", text="A")
 
         # Rename file to same name
         file = File(libpath)
-        renamed_file = file.rename_regex(r"file_([a-z]*)", r"file_\1", same_name_ok=True)
+        renamed_file = file.rename_regex(r"file-([a-z]*)", r"file-\1", same_name_ok=True)
 
         # Check file libpath has not changed and file content has not moved
         assert renamed_file.libpath == libpath
         assert file_has_text(libpath, "A")
 
-    def test_rename_regex_raises_on_file_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_rename_regex_raises_on_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath = parent_libpath / "file.txt"
@@ -105,7 +107,7 @@ class TestFile:
         # Rename file that does not exist
         file = File(libpath)
         with pytest.raises(FileNotFoundError, match="File does not exist"):
-            file.rename_regex(r"file_([a-z]*)", r"file_\1", same_name_ok=True)
+            file.rename_regex(r"file-([a-z]*)", r"file-\1", same_name_ok=True)
 
     def test_move_into_moves_file_into_dir(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
@@ -228,7 +230,7 @@ class TestFile:
         # Check file has been removed
         assert not libpath_file.exists()
 
-    def test_delete_raises_on_file_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_delete_raises_on_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath = parent_libpath / "file.txt"
@@ -238,7 +240,7 @@ class TestFile:
         with pytest.raises(FileNotFoundError, match="File does not exist"):
             file.delete()
 
-    def test_delete_does_nothing_on_file_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_delete_does_nothing_on_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath = parent_libpath / "file.txt"
@@ -257,7 +259,7 @@ class TestFile:
         assert isinstance(file.parent, Dir)
         assert file.parent.libpath == parent_libpath
 
-    def test_parent_property_raises_on_file_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
+    def test_parent_property_raises_on_not_found(self, tmp_path_factory: pytest.TempPathFactory) -> None:
         # Set up file system
         parent_libpath = tmp_path_factory.mktemp("parent")
         libpath = parent_libpath / "file.txt"

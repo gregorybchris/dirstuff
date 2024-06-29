@@ -71,9 +71,6 @@ class Dir(Path):
                 files.append(File(libpath))
             elif libpath.is_dir():
                 dirs.append(Dir(libpath))
-            else:
-                msg = f"Could not parse path as file or directory: {libpath}"
-                raise ValueError(msg)
         return files, dirs
 
     def iter_files(self) -> Iterator["File"]:
@@ -214,9 +211,11 @@ class Dir(Path):
         Raises:
             FileNotFoundError: If the directory does not exist and missing_ok is False.
         """
-        if not self.exists() and not missing_ok:
-            msg = f"No directory at {self.libpath}"
-            raise FileNotFoundError(msg)
+        if not self.exists():
+            if not missing_ok:
+                msg = f"Dir does not exist: {self.libpath}"
+                raise FileNotFoundError(msg)
+            return
         shutil.rmtree(self.libpath)
 
     def make(self, parents: bool = True, exist_ok: bool = True) -> "Dir":
