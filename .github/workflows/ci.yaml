@@ -1,0 +1,69 @@
+name: Package CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-unit:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version:
+          - "3.11"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Python ${{ matrix.python-version }} Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          pip install poetry
+
+          if [ -d /poetryenvs ]; then rm -rf ~/poetryenvs; fi
+          poetry config virtualenvs.path ~/poetryenvs
+          poetry install
+
+      - name: Run Ruff
+        shell: bash
+        run: |
+          poetry run ruff check .
+          poetry run ruff format . --check
+
+      - name: Run mypy
+        shell: bash
+        run: |
+          poetry run mypy dirstuff --config pyproject.toml
+
+      - name: Run pytest
+        shell: bash
+        run: |
+          poetry run pytest tests --cov=dirstuff --cov-report=html --cov-report=xml --cov-branch
+
+      - name: Upload HTML Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: dirstuff-unit-coverage-html
+          path: dirstuff/htmlcov
+
+      - name: Upload XML Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: dirstuff-unit-coverage-xml
+          path: dirstuff/coverage.xml
+
+      - name: Check Coverage
+        shell: bash
+        run: |
+          poetry run covcheck coverage.xml --config pyproject.toml
