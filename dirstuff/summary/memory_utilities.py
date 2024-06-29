@@ -17,6 +17,10 @@ def bytes_to_size(n_bytes: int) -> str:
     Returns:
         str: Size of file/dir with reasonable units.
     """
+    if n_bytes < 0:
+        msg = f"Bytes could not be converted to a size: {n_bytes}"
+        raise ValueError(msg)
+
     for units in MEMORY_UNITS:
         multiplier = _bytes_per_units(units)
         if n_bytes < multiplier * 1000:
