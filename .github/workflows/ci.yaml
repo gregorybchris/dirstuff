@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build-unit:
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -35,7 +35,7 @@ jobs:
           poetry config virtualenvs.path ~/poetryenvs
           poetry install
 
-      - name: Run Ruff
+      - name: Run ruff
         shell: bash
         run: |
           poetry run ruff check .
@@ -51,19 +51,19 @@ jobs:
         run: |
           poetry run pytest tests --cov=dirstuff --cov-report=html --cov-report=xml --cov-branch
 
-      - name: Upload HTML Coverage
+      - name: Upload HTML coverage
         uses: actions/upload-artifact@v2
         with:
           name: dirstuff-unit-coverage-html
           path: dirstuff/htmlcov
 
-      - name: Upload XML Coverage
+      - name: Upload XML coverage
         uses: actions/upload-artifact@v2
         with:
           name: dirstuff-unit-coverage-xml
           path: dirstuff/coverage.xml
 
-      - name: Check Coverage
+      - name: Check coverage
         shell: bash
         run: |
           poetry run covcheck coverage.xml --config pyproject.toml
