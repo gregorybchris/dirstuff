@@ -52,4 +52,4 @@ def search_command(
     min_size: str,
 ) -> None:
     tree = get_tree(root, min_size)
-    tree.print_list(dir_name=dir_name)
+    tree.print_search(dir_name=dir_name)
