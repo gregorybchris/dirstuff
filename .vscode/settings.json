@@ -15,5 +15,8 @@
   "prettier.printWidth": 120,
   "ruff.format.args": ["--config", "pyproject.toml"],
   "ruff.nativeServer": true,
-  "cSpell.words": ["libpath", "shutil"]
+  "cSpell.words": ["libpath", "shutil"],
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true
 }
