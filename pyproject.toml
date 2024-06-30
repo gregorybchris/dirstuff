@@ -6,8 +6,17 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.11",
 ]
-description = "Directory summary tool."
-keywords = ['directory', 'file', 'summary']
+description = "Python utilities for filesystem operations."
+keywords = [
+    'file',
+    'directory',
+    'system',
+    "delete",
+    "move",
+    "copy",
+    "rename",
+    "regex",
+]
 license = "Apache Software License"
 name = "dirstuff"
 readme = "README.md"
