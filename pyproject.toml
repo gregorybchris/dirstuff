@@ -40,7 +40,7 @@ ruff = "^0.5.0"
 semver = "^3.0.0"
 
 [tool.poetry.scripts]
-dirstuff = "dirstuff._cli.main:main"
+dirstuff = "dirstuff._cli.cli:main"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
