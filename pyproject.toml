@@ -38,8 +38,8 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
 [tool.covcheck]
-branch = 71.0
-line = 73.0
+branch = 73.0
+line = 75.0
 
 [tool.mypy]
 disallow_incomplete_defs = true

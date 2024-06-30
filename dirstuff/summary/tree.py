@@ -5,7 +5,7 @@ from typing import Iterator
 from colorama import Fore
 
 from dirstuff.summary.filter_criteria import FilterCriteria
-from dirstuff.summary.memory_utilities import bytes_to_size
+from dirstuff.summary.memory_utilities import to_size_str
 
 # ruff: noqa: T201
 
@@ -73,7 +73,7 @@ class Tree:
             depth (int): The depth of the tree. Defaults to 0.
             recursive (bool): Print the tree recursively. Defaults to True.
         """
-        formatted_size = bytes_to_size(self.size)
+        formatted_size = to_size_str(self.size)
         indent = "  " * depth
         _, dir_str = os.path.split(str(self.path))
         directory = Path(dir_str)
